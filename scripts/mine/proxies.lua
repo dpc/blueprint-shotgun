@@ -24,13 +24,38 @@ return function(params)
 
         for i, plan in pairs(removal_plan) do
             local slot = game.create_inventory(1)
-            for j, item in pairs(plan.items.in_inventory) do
-                local inventory = target.get_inventory(item.inventory) --[[@as LuaInventory]]
-                if not slot[1].transfer_stack(inventory[item.stack + 1]) then
-                    slot.destroy()
-                    break
+
+            local items = plan.items
+            if items.in_inventory then
+                for j, item in pairs(items.in_inventory) do
+                    local inventory = target.get_inventory(item.inventory) --[[@as LuaInventory]]
+                    if not slot[1].transfer_stack(inventory[item.stack + 1]) then -- could fail if transferring more than stack size?
+                        -- slot.destroy()
+                        break
+                    end
+                    items.in_inventory[j] = nil
+
+                    vacuum_limit = vacuum_limit - 1
+                    params.ammo_item.drain_ammo(0.125)
+
+                    if vacuum_limit == 0 then break end
+                    if not params.ammo_item.valid_for_read then break end
                 end
-                plan.items.in_inventory[j] = nil
+
+                items.in_inventory = utils.condense(items.in_inventory)
+            else
+                local grid = target.grid --[[@as LuaEquipmentGrid]]
+                local name = plan.id.name
+                local quality = plan.id.quality or "normal"
+                for _, equipment in pairs(grid.equipment) do
+                    if equipment.to_be_removed and equipment.name == name and equipment.quality.name == quality then
+                        if not slot[1].set_stack{name = name, count = slot[1].count + 1, quality = quality} then
+                            break
+                        end
+                        grid.take{equipment = equipment}
+                    end
+                end
+                items.grid_count = items.grid_count - slot[1].count
 
                 vacuum_limit = vacuum_limit - 1
                 params.ammo_item.drain_ammo(0.125)
@@ -39,8 +64,7 @@ return function(params)
                 if not params.ammo_item.valid_for_read then break end
             end
 
-            plan.items.in_inventory = utils.condense(plan.items.in_inventory)
-            if #plan.items.in_inventory == 0 then
+            if not ((items.in_inventory and items.in_inventory[1]) or items.grid_count and items.grid_count > 0) then
                 removal_plan[i] = nil
             end
 

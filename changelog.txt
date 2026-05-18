@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.20
+Date: 2026-05-18
+  Features:
+    - Added equipment ghost insert/removal support
+  Bugfixes:
+    - Fixed rare item deletion with item removal requests
+---------------------------------------------------------------------------------------------------
 Version: 0.2.19
 Date: 2026-04-08
   Bugfixes:

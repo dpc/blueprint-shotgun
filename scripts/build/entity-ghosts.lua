@@ -1,7 +1,7 @@
 local utils = require("scripts/utils") --[[@as BlueprintShotgun.utils]]
 local render = require("scripts/render") --[[@as BlueprintShotgun.render]]
 
----@class BlueprintShotgun.enitty-ghosts
+---@class BlueprintShotgun.entity-ghosts
 local lib = {}
 
 ---@param params BlueprintShotgun.HandlerParams
