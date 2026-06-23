@@ -55,7 +55,7 @@ function lib.process(params)
             target_pos = entity.position,
             start_tick = params.tick,
             end_tick = params.tick + duration,
-            orientation_deviation = utils.orientation_deviaiton(),
+            orientation_deviation = utils.orientation_deviation(),
             target_entity = entity,
             unit_number = entity.unit_number,
             sprite = sprite,
@@ -90,7 +90,7 @@ local function upgrade(item)
         lines = {}
         local output = entity.belt_to_ground_type == "input" and entity or item.connection --[[@as LuaEntity]]
         for i = 1, 2 do
-            local line = output.get_transport_line(i + 2)
+            local line = output.get_transport_line(i + 2 --[[@as defines.transport_line]])
             local contents = line.get_detailed_contents()
             local inventory = game.create_inventory(#contents)
             for j = #contents, 1, -1 do
@@ -144,17 +144,12 @@ local function upgrade(item)
 
     if success then
         surface.play_sound{path = "entity-build/" .. target.name, position = position}
-        local inventory = character.get_main_inventory() --[[@as LuaInventory]]
-        for i = 1, #inventory do
-            local stack = inventory[i]
-            if not stack.valid_for_read then break end
-            surface.spill_item_stack{
-                position = position,
-                stack = stack,
-                force = force,
-                allow_belts = false
-            }
-        end
+        surface.spill_inventory{
+            inventory = character.get_main_inventory() --[[@as LuaInventory]],
+            position = position,
+            force = force,
+            allow_belts = false,
+        }
     end
     character.destroy()
 
@@ -165,22 +160,19 @@ local function upgrade(item)
                 local line = lines[i]
                 local contents = line.contents
                 local inventory = line.inventory
-                local insert = output.get_transport_line(i + 2).force_insert_at
+                local insert = output.get_transport_line(i + 2 --[[@as defines.transport_line]]).force_insert_at
                 for j = 1, #inventory do
                     insert(contents[j].position, inventory[j])
                 end
             end
         else
             for i = 1, 2 do
-                local inventory = lines[i].inventory
-                for j = 1, #inventory do
-                    surface.spill_item_stack{
-                        position = position,
-                        stack = inventory[j],
-                        force = force,
-                        allow_belts = false
-                    }
-                end
+                surface.spill_inventory{
+                    inventory = lines[i].inventory,
+                    position = position,
+                    force = force,
+                    allow_belts = false,
+                }
             end
         end
         for i = 1, 2 do

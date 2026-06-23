@@ -49,7 +49,7 @@ function lib.process(params)
             target_pos = ghost.position,
             start_tick = params.tick,
             end_tick = params.tick + duration,
-            orientation_deviation = utils.orientation_deviaiton(),
+            orientation_deviation = utils.orientation_deviation(),
             sprite = sprite,
             shadow = shadow,
             target_entity = ghost,
