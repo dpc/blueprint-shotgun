@@ -83,8 +83,7 @@ function lib.action(item)
         local old = surface.get_tile(position)
         if old.prototype.is_foundation == target_entity.ghost_prototype.is_foundation then
             local character = utils.temp_character(surface, target_entity.force)
-            game.print(character.mine_tile(old))
-            game.print(serpent.block(character.get_main_inventory().get_contents()))
+            character.mine_tile(old)
             surface.spill_inventory{
                 inventory = character.get_main_inventory() --[[@as LuaInventory]],
                 position = position,
