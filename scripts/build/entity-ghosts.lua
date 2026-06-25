@@ -83,6 +83,7 @@ local function try_revive(item)
     do return end
     ::forelse::
 
+    local tags = target_entity.tags
     local success, entity = target_entity.revive() ---@cast entity LuaEntity
     if success == nil then return end
 
@@ -91,7 +92,7 @@ local function try_revive(item)
     local stats = entity.force.get_entity_build_count_statistics(entity.surface)
     stats.on_flow(entity, 1)
 
-    script.raise_script_revive{entity = entity}
+    script.raise_script_revive{entity = entity, tags = tags}
 
     return true
 end
