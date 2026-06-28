@@ -5,6 +5,12 @@ local technologies = {
     ["blueprint-shotgun"] = "0",
     ["blueprint-shotgun-upgrade-1"] = "0",
     ["blueprint-shotgun-upgrade-2"] = "1a",
+    ["blueprint-shotgun-upgrade-3"] = "1b",
+    ["blueprint-shotgun-upgrade-4"] = "2",
+    ["blueprint-shotgun-upgrade-5"] = "3",
+    ["blueprint-shotgun-upgrade-6"] = "4",
+    ["blueprint-shotgun-upgrade-7"] = "5",
+    ["blueprint-shotgun-upgrade-8"] = "6",
 }
 
 for tech, level in pairs(technologies) do
@@ -15,6 +21,13 @@ end
 
 data.raw.technology["blueprint-shotgun"].prerequisites = {"cube-electronics"}
 data.raw.technology["blueprint-shotgun-upgrade-2"].prerequisites[2] = "cube-fundamental-comprehension-card"
+data.raw.technology["blueprint-shotgun-upgrade-3"].prerequisites[2] = "cube-fundamental-comprehension-card"
+data.raw.technology["blueprint-shotgun-upgrade-4"].prerequisites[2] = "cube-abstract-interrogation-card"
+data.raw.technology["blueprint-shotgun-upgrade-5"].prerequisites[2] = "cube-deep-introspection-card"
+data.raw.technology["blueprint-shotgun-upgrade-6"].prerequisites[2] = "cube-synthetic-premonition-card"
+data.raw.technology["blueprint-shotgun-upgrade-7"].prerequisites[2] = "cube-deep-introspection-card"
+data.raw.technology["blueprint-shotgun-upgrade-7"].prerequisites[3] = "cube-synthetic-premonition-card"
+data.raw.technology["blueprint-shotgun-upgrade-8"].prerequisites[2] = "cube-complete-annihilation-card"
 
 table.remove(data.raw.technology["blueprint-shotgun"].effects, 3)
 

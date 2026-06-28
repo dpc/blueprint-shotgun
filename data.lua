@@ -1,12 +1,12 @@
 data:extend{{
     type = "gun",
     name = "blueprint-shotgun",
-    icon = "__blueprint-shotgun__/graphics/blueprint-shotgun.png",
+    icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png",
     stack_size = 1,
     attack_parameters = {
         type = "projectile",
         cooldown = 1,
-        range = 15 + 3.5, -- build radius
+        range = 20 + 4.5, -- max upgraded target range + build radius
         movement_slow_down_factor = 0,
         ammo_consumption_modifier = 0,
         ammo_categories = {"blueprint-ammo"},
@@ -18,7 +18,7 @@ data:extend{{
 data:extend{{
     type = "ammo",
     name = "item-canister",
-    icon = "__blueprint-shotgun__/graphics/item-canister.png",
+    icon = "__blueprint-shotgun-boosted__/graphics/item-canister.png",
     stack_size = 200,
     magazine_size = 25,
     ammo_category = "blueprint-ammo",
@@ -42,7 +42,7 @@ data:extend{{
 data:extend{{
     type = "ammo-category",
     name = "blueprint-ammo",
-    icon = "__blueprint-shotgun__/graphics/item-canister.png",
+    icon = "__blueprint-shotgun-boosted__/graphics/item-canister.png",
     subgroup = "ammo-category",
 }} --[[@as data.AmmoCategory[] ]]
 
@@ -74,7 +74,7 @@ data:extend{{
 data:extend{{
     type = "technology",
     name = "blueprint-shotgun",
-    icon = "__blueprint-shotgun__/graphics/blueprint-shotgun.png",
+    icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png",
     icon_size = 64,
     effects = {{
         type = "unlock-recipe",
@@ -103,7 +103,7 @@ data:extend{{
     type = "sound",
     name = "blueprint-shotgun-shoot",
     category = "game-effect",
-    filename = "__blueprint-shotgun__/sounds/shoot.wav",
+    filename = "__blueprint-shotgun-boosted__/sounds/shoot.wav",
     min_speed = 0.95,
     max_speed = 1.05,
     game_controller_vibration_data =
@@ -115,7 +115,7 @@ data:extend{{
     type = "sound",
     name = "blueprint-shotgun-vacuum-start",
     category = "game-effect",
-    filename = "__blueprint-shotgun__/sounds/vacuum-start.wav",
+    filename = "__blueprint-shotgun-boosted__/sounds/vacuum-start.wav",
     game_controller_vibration_data = {
         high_frequency_vibration_intensity = 0.6,
         duration = 100,
@@ -125,7 +125,7 @@ data:extend{{
 data:extend{{
     type = "sprite",
     name = "item-shadow",
-    filename = "__blueprint-shotgun__/graphics/item-shadow.png",
+    filename = "__blueprint-shotgun-boosted__/graphics/item-shadow.png",
     size = 16,
     draw_as_shadow = true,
 }} --[[@as data.SpritePrototype[] ]]
@@ -136,7 +136,7 @@ data:extend{{
     flags = {"not-on-map", "placeable-off-grid"},
     acceleration = 0.01,
     animation = {
-        filename = "__blueprint-shotgun__/graphics/vacuum-smoke.png",
+        filename = "__blueprint-shotgun-boosted__/graphics/vacuum-smoke.png",
         -- draw_as_glow = true,
         frame_count = 16,
         width = 50,
@@ -157,35 +157,89 @@ data:extend{{
     key_sequence = "CONTROL + TAB",
 }} --[[@as data.CustomInputPrototype[] ]]
 
-for i = 1, 2 do
-    local ingredients = {{"automation-science-pack", 1}}
-    local prerequisites = i == 1 and {"blueprint-shotgun"} or {"blueprint-shotgun-upgrade-1", "logistic-science-pack"}
-    if i == 2 then
-        ingredients[2] = {"logistic-science-pack", 1}
-    end
+local upgrade_techs = {
+    {
+        count = 50,
+        ingredients = {{"automation-science-pack", 1}},
+        prerequisites = {"blueprint-shotgun"},
+    },
+    {
+        count = 100,
+        ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}},
+        prerequisites = {"blueprint-shotgun-upgrade-1", "logistic-science-pack"},
+        target_range = true,
+    },
+    {
+        count = 200,
+        ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}},
+        prerequisites = {"blueprint-shotgun-upgrade-2", "military-science-pack"},
+        build_radius = true,
+    },
+    {
+        count = 300,
+        ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}},
+        prerequisites = {"blueprint-shotgun-upgrade-3", "chemical-science-pack"},
+        vacuum_radius = true,
+        extra_vacuum_power = true,
+    },
+    {
+        count = 500,
+        ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}},
+        prerequisites = {"blueprint-shotgun-upgrade-4", "production-science-pack"},
+        vacuum_cooldown = true,
+        handling = true,
+    },
+    {
+        count = 750,
+        ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}},
+        prerequisites = {"blueprint-shotgun-upgrade-5", "utility-science-pack"},
+    },
+    {
+        count = 1000,
+        ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}},
+        prerequisites = {"blueprint-shotgun-upgrade-6", "production-science-pack", "utility-science-pack"},
+    },
+    {
+        count = 1500,
+        ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}},
+        prerequisites = {"blueprint-shotgun-upgrade-7"},
+        handling = true,
+    },
+}
 
-    data:extend{{
-        type = "technology",
-        name = "blueprint-shotgun-upgrade-" .. i,
-        icon = "__blueprint-shotgun__/graphics/blueprint-shotgun.png",
-        icon_size = 64,
-        effects = {{
-            type = "nothing",
-            effect_description = {"blueprint-shotgun.capacity-upgrade"},
-            icons = {{
-                icon = "__blueprint-shotgun__/graphics/item-canister.png",
-            }, {
-                icon = "__core__/graphics/icons/technology/constants/constant-capacity.png",
-                icon_size = 128,
-                shift = {11, 9},
-                floating = true,
-            }},
-            use_icon_overlay_constant = false,
+for i, tech in ipairs(upgrade_techs) do
+    local effects = {{
+        type = "nothing",
+        effect_description = {"blueprint-shotgun.capacity-upgrade"},
+        icons = {{
+            icon = "__blueprint-shotgun-boosted__/graphics/item-canister.png",
         }, {
+            icon = "__core__/graphics/icons/technology/constants/constant-capacity.png",
+            icon_size = 128,
+            shift = {11, 9},
+            floating = true,
+        }},
+        use_icon_overlay_constant = false,
+    }, {
+        type = "nothing",
+        effect_description = {"blueprint-shotgun.vacuum-upgrade"},
+        icons = {{
+            icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png"
+        }, {
+            icon = "__core__/graphics/icons/technology/constants/constant-speed.png",
+            icon_size = 128,
+            shift = {11, 9},
+            floating = true,
+        }},
+        use_icon_overlay_constant = false,
+    }}
+
+    if tech.handling then
+        table.insert(effects, {
             type = "nothing",
-            effect_description = {"blueprint-shotgun.vacuum-upgrade"},
+            effect_description = {"blueprint-shotgun.handling-upgrade"},
             icons = {{
-                icon = "__blueprint-shotgun__/graphics/blueprint-shotgun.png"
+                icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png"
             }, {
                 icon = "__core__/graphics/icons/technology/constants/constant-speed.png",
                 icon_size = 128,
@@ -193,13 +247,101 @@ for i = 1, 2 do
                 floating = true,
             }},
             use_icon_overlay_constant = false,
-        }},
+        })
+    end
+
+    if tech.target_range then
+        table.insert(effects, {
+            type = "nothing",
+            effect_description = {"blueprint-shotgun.target-range-upgrade"},
+            icons = {{
+                icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png"
+            }, {
+                icon = "__core__/graphics/icons/technology/constants/constant-speed.png",
+                icon_size = 128,
+                shift = {11, 9},
+                floating = true,
+            }},
+            use_icon_overlay_constant = false,
+        })
+    end
+
+    if tech.build_radius then
+        table.insert(effects, {
+            type = "nothing",
+            effect_description = {"blueprint-shotgun.build-radius-upgrade"},
+            icons = {{
+                icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png"
+            }, {
+                icon = "__core__/graphics/icons/technology/constants/constant-speed.png",
+                icon_size = 128,
+                shift = {11, 9},
+                floating = true,
+            }},
+            use_icon_overlay_constant = false,
+        })
+    end
+
+    if tech.vacuum_radius then
+        table.insert(effects, {
+            type = "nothing",
+            effect_description = {"blueprint-shotgun.vacuum-radius-upgrade"},
+            icons = {{
+                icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png"
+            }, {
+                icon = "__core__/graphics/icons/technology/constants/constant-speed.png",
+                icon_size = 128,
+                shift = {11, 9},
+                floating = true,
+            }},
+            use_icon_overlay_constant = false,
+        })
+    end
+
+    if tech.extra_vacuum_power then
+        table.insert(effects, {
+            type = "nothing",
+            effect_description = {"blueprint-shotgun.extra-vacuum-power-upgrade"},
+            icons = {{
+                icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png"
+            }, {
+                icon = "__core__/graphics/icons/technology/constants/constant-speed.png",
+                icon_size = 128,
+                shift = {11, 9},
+                floating = true,
+            }},
+            use_icon_overlay_constant = false,
+        })
+    end
+
+    if tech.vacuum_cooldown then
+        table.insert(effects, {
+            type = "nothing",
+            effect_description = {"blueprint-shotgun.vacuum-cooldown-upgrade"},
+            icons = {{
+                icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png"
+            }, {
+                icon = "__core__/graphics/icons/technology/constants/constant-speed.png",
+                icon_size = 128,
+                shift = {11, 9},
+                floating = true,
+            }},
+            use_icon_overlay_constant = false,
+        })
+    end
+
+    data:extend{{
+        type = "technology",
+        name = "blueprint-shotgun-upgrade-" .. i,
+        icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png",
+        icon_size = 64,
+        effects = effects,
         unit = {
-            count = i * 50,
-            ingredients = ingredients,
+            count = tech.count,
+            ingredients = tech.ingredients,
             time = 15,
         },
-        prerequisites = prerequisites,
+        prerequisites = tech.prerequisites,
         upgrade = true,
         localised_name = {"technology-name.blueprint-shotgun-upgrade", tostring(i)},
         localised_description = {"technology-description.blueprint-shotgun-upgrade"},
@@ -211,7 +353,7 @@ for i = 1, 160 do
         type = "sound",
         name = "blueprint-shotgun-vacuum-" .. i,
         category = "game-effect",
-        filename = "__blueprint-shotgun__/sounds/vacuum/vacuum-" .. i .. ".wav",
+        filename = "__blueprint-shotgun-boosted__/sounds/vacuum/vacuum-" .. i .. ".wav",
         game_controller_vibration_data = {
             low_frequency_vibration_intensity = 0.4,
             duration = 100,
@@ -222,7 +364,7 @@ end
 data:extend{{
     type = "armor",
     name = "blueprint-shotgun-dummy-armor",
-    icon = "__blueprint-shotgun__/graphics/blueprint-shotgun.png",
+    icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png",
     infinite = true,
     stack_size = 1,
     hidden = true,
@@ -240,7 +382,7 @@ data:extend{{
         running = util.empty_sprite(),
         running_with_gun = {
             direction_count = 18,
-            filename = "__blueprint-shotgun__/graphics/running-with-gun.png",
+            filename = "__blueprint-shotgun-boosted__/graphics/running-with-gun.png",
             size = 1,
         },
         mining_with_tool = util.empty_sprite(),
@@ -280,4 +422,4 @@ end
 require("compatibility/AmmoGroup")
 require("compatibility/bobelectronics")
 require("compatibility/PlanetsLib")
-require("compatibility/Ultracube")
+require("compatibility/ultracube")

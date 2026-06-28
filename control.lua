@@ -147,13 +147,23 @@ script.on_event(e.on_script_trigger_effect, function(event)
     if not character then return end
 
     local character_radius = character.get_radius()
-    local radius = 15 + character_radius
-
-    -- render.debug_circle({g = 0.15, a = 0.15}, radius, surface, character)
-    -- render.debug_circle({g = 0.15, b = 0.15, a = 0.15}, radius + 3.5, surface, character)
 
     local data = utils.get_character_data(character)
-    if data.mode == "build" and event.tick - data.tick < 30 then return end
+    local technologies = character.force.technologies
+    local handling_cooldown = 30
+    if technologies["blueprint-shotgun-upgrade-8"].researched then
+        handling_cooldown = 10
+    elseif technologies["blueprint-shotgun-upgrade-5"].researched then
+        handling_cooldown = 20
+    end
+    local vacuum_cooldown = technologies["blueprint-shotgun-upgrade-5"].researched and 1 or 3
+    local target_range = technologies["blueprint-shotgun-upgrade-2"].researched and 20 or 15
+    local build_radius = technologies["blueprint-shotgun-upgrade-3"].researched and 4.5 or 3.5
+    local vacuum_radius = technologies["blueprint-shotgun-upgrade-4"].researched and 3 or 2
+    if data.mode == "build" and event.tick - data.tick < handling_cooldown then return end
+
+    -- render.debug_circle({g = 0.15, a = 0.15}, target_range + character_radius, surface, character)
+    -- render.debug_circle({g = 0.15, b = 0.15, a = 0.15}, target_range + character_radius + build_radius, surface, character)
 
     local source_pos = event.source_position --[[@as MapPosition]]
     local target_pos = event.target_position --[[@as MapPosition]]
@@ -161,20 +171,29 @@ script.on_event(e.on_script_trigger_effect, function(event)
     local angle = math.atan2(-source_pos.x + target_pos.x, source_pos.y - target_pos.y)
     -- render.debug_line({r = 1, g = 1}, 2, surface,
     --     vec.add(source_pos, vec.rotate({x = 0, y = -1.125}, angle)),
-    --     vec.add(source_pos, vec.rotate({x = 0, y = -radius}, angle))
+    --     vec.add(source_pos, vec.rotate({x = 0, y = -target_range - character_radius}, angle))
     -- )
 
     -- render.debug_circle({r = 1}, 1/4, surface, target_pos)
 
-    if vec.dist2(character.position, target_pos) > (15 + character.get_radius())^2 then
-        target_pos = vec.add(character.position, vec.rotate({x = 0, y = -radius}, angle))
+    local target_distance = target_range + character.get_radius()
+    if vec.dist2(character.position, target_pos) > target_distance^2 then
+        target_pos = vec.add(character.position, vec.rotate({x = 0, y = -target_distance}, angle))
         -- render.debug_circle({g = 1}, 1/4, surface, target_pos)
     end
 
-    local technologies = character.force.technologies
     local bonus = settings.startup["blueprint-shotgun-cheat-bonus"].value
-    if technologies["blueprint-shotgun-upgrade-1"].researched then bonus = bonus + 1 end
-    if technologies["blueprint-shotgun-upgrade-2"].researched then bonus = bonus + 1 end
+    local vacuum_bonus = bonus
+    for i = 1, 8 do
+        local technology = technologies["blueprint-shotgun-upgrade-" .. i]
+        if technology and technology.researched then
+            bonus = bonus + 1
+            vacuum_bonus = vacuum_bonus + 1
+        end
+    end
+    if technologies["blueprint-shotgun-upgrade-4"].researched then
+        vacuum_bonus = vacuum_bonus + 1
+    end
 
     local inventory = character.get_main_inventory() --[[@as LuaInventory]]
     local gun_index = character.selected_gun_index
@@ -194,15 +213,15 @@ script.on_event(e.on_script_trigger_effect, function(event)
         ammo_item = ammo_item,
         ammo_limit = ammo_limit,
         bonus = bonus,
-        mining_speed = (2 + bonus) * 5/4,
+        mining_speed = (2 + vacuum_bonus) * 5/4,
         source_pos = vec.add(source_pos, vec.rotate({x = 0, y = -1.125}, target_direction * direction_to_angle)),
         target_pos = target_pos,
-        radius = 3.5,
+        radius = build_radius,
         tick = event.tick,
     }
 
     if data.mode == "build" then
-        if event.tick - data.tick < 30 then return end
+        if event.tick - data.tick < handling_cooldown then return end
 
         local i = 1
         local max_tries = 1
@@ -251,9 +270,9 @@ script.on_event(e.on_script_trigger_effect, function(event)
     end
 
     if data.mode == "mine" then
-        if event.tick - data.tick < 3 then return end
+        if event.tick - data.tick < vacuum_cooldown then return end
 
-        params.radius = 2
+        params.radius = vacuum_radius
 
         local i = 1
         local max_tries = 1
@@ -290,7 +309,7 @@ script.on_event(e.on_script_trigger_effect, function(event)
 
         if not mined then
             if data.auto_swap == false then return end
-            if event.tick - data.tick < 30 then return end
+            if event.tick - data.tick < handling_cooldown then return end
             data.mode = "build"
         end
     end

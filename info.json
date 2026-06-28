@@ -1,14 +1,15 @@
 {
-    "name": "blueprint-shotgun",
-    "version": "0.3.3",
-    "title": "Blueprint Shotgun",
-    "author": "_CodeGreen",
-    "contact": "Discord: @_codegreen",
-    "description": "Adds a gun that shoots items to build ghosts, upgrade entities, and more!\nAlso features a vacuum mode to mine entities, tiles, and ground items.\nAn alternative to nanobots or other early bot start mods.",
-    "factorio_version": "2.1",
-    "dependencies": [
-        "base >= 1.1.105",
-        "(?) apm_lib_ldinc",
-        "(?) PlanetsLib"
-    ]
+  "name": "blueprint-shotgun-boosted",
+  "version": "0.3.3",
+  "title": "Blueprint Shotgun Boosted",
+  "author": "dpc",
+  "contact": "https://github.com/dpc/blueprint-shotgun",
+  "description": "Fork of _CodeGreen's Blueprint Shotgun (https://mods.factorio.com/mod/blueprint-shotgun?from=search).\nThis fork makes the shotgun more useful by introducing more upgrades that improve its performance through the early and mid game, reducing tedious manual item placement and keeping it useful even when construction bots are already an alternative.\nKeeps the original in-game item, technology, setting, and control names for compatibility.",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 1.1.105",
+    "(?) apm_lib_ldinc",
+    "(?) PlanetsLib",
+    "! blueprint-shotgun"
+  ]
 }
