@@ -6,7 +6,7 @@ data:extend{{
     attack_parameters = {
         type = "projectile",
         cooldown = 1,
-        range = 20 + 4.5, -- max upgraded target range + build radius
+        range = 22 + 5, -- max upgraded target range + build radius
         movement_slow_down_factor = 0,
         ammo_consumption_modifier = 0,
         ammo_categories = {"blueprint-ammo"},
@@ -174,12 +174,12 @@ local upgrade_techs = {
         ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}},
         prerequisites = {"blueprint-shotgun-upgrade-2", "military-science-pack"},
         build_radius = true,
+        vacuum_radius = true,
     },
     {
         count = 300,
         ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}},
         prerequisites = {"blueprint-shotgun-upgrade-3", "chemical-science-pack"},
-        vacuum_radius = true,
         extra_vacuum_power = true,
     },
     {
