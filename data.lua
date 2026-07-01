@@ -6,7 +6,7 @@ data:extend{{
     attack_parameters = {
         type = "projectile",
         cooldown = 1,
-        range = 22 + 5, -- max upgraded target range + build radius
+        range = 22 + 6, -- max upgraded target range + build radius
         movement_slow_down_factor = 0,
         ammo_consumption_modifier = 0,
         ammo_categories = {"blueprint-ammo"},
@@ -173,8 +173,8 @@ local upgrade_techs = {
         count = 200,
         ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}},
         prerequisites = {"blueprint-shotgun-upgrade-2", "military-science-pack"},
-        build_radius = true,
-        vacuum_radius = true,
+        build_radius = "+1.5 tiles",
+        vacuum_radius = "+1 tile",
     },
     {
         count = 300,
@@ -188,22 +188,27 @@ local upgrade_techs = {
         prerequisites = {"blueprint-shotgun-upgrade-4", "production-science-pack"},
         vacuum_cooldown = true,
         handling = true,
+        vacuum_radius = "+1 tile",
     },
     {
         count = 750,
         ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}},
         prerequisites = {"blueprint-shotgun-upgrade-5", "utility-science-pack"},
+        build_radius = "+0.5 tiles",
     },
     {
         count = 1000,
         ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}},
         prerequisites = {"blueprint-shotgun-upgrade-6", "production-science-pack", "utility-science-pack"},
+        vacuum_radius = "+1 tile",
     },
     {
         count = 1500,
         ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}},
         prerequisites = {"blueprint-shotgun-upgrade-7"},
         handling = true,
+        build_radius = "+0.5 tiles",
+        vacuum_radius = "+1 tile",
     },
 }
 
@@ -269,7 +274,7 @@ for i, tech in ipairs(upgrade_techs) do
     if tech.build_radius then
         table.insert(effects, {
             type = "nothing",
-            effect_description = {"blueprint-shotgun.build-radius-upgrade"},
+            effect_description = {"blueprint-shotgun.build-radius-upgrade", tech.build_radius},
             icons = {{
                 icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png"
             }, {
@@ -285,7 +290,7 @@ for i, tech in ipairs(upgrade_techs) do
     if tech.vacuum_radius then
         table.insert(effects, {
             type = "nothing",
-            effect_description = {"blueprint-shotgun.vacuum-radius-upgrade"},
+            effect_description = {"blueprint-shotgun.vacuum-radius-upgrade", tech.vacuum_radius},
             icons = {{
                 icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png"
             }, {

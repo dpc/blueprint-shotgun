@@ -158,8 +158,26 @@ script.on_event(e.on_script_trigger_effect, function(event)
     end
     local vacuum_cooldown = technologies["blueprint-shotgun-upgrade-5"].researched and 1 or 3
     local target_range = technologies["blueprint-shotgun-upgrade-2"].researched and 22 or 15
-    local build_radius = technologies["blueprint-shotgun-upgrade-3"].researched and 5 or 3.5
-    local vacuum_radius = technologies["blueprint-shotgun-upgrade-3"].researched and 3 or 2
+
+    local build_radius = 3.5
+    if technologies["blueprint-shotgun-upgrade-8"].researched then
+        build_radius = 6
+    elseif technologies["blueprint-shotgun-upgrade-6"].researched then
+        build_radius = 5.5
+    elseif technologies["blueprint-shotgun-upgrade-3"].researched then
+        build_radius = 5
+    end
+
+    local vacuum_radius = 2
+    if technologies["blueprint-shotgun-upgrade-8"].researched then
+        vacuum_radius = 6
+    elseif technologies["blueprint-shotgun-upgrade-7"].researched then
+        vacuum_radius = 5
+    elseif technologies["blueprint-shotgun-upgrade-5"].researched then
+        vacuum_radius = 4
+    elseif technologies["blueprint-shotgun-upgrade-3"].researched then
+        vacuum_radius = 3
+    end
     if data.mode == "build" and event.tick - data.tick < handling_cooldown then return end
 
     -- render.debug_circle({g = 0.15, a = 0.15}, target_range + character_radius, surface, character)
