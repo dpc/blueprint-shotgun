@@ -6,7 +6,7 @@ data:extend{{
     attack_parameters = {
         type = "projectile",
         cooldown = 1,
-        range = 22 + 6, -- max upgraded target range + build radius
+        range = 22 + 8, -- max upgraded target range + build radius
         movement_slow_down_factor = 0,
         ammo_consumption_modifier = 0,
         ammo_categories = {"blueprint-ammo"},
@@ -174,7 +174,7 @@ local upgrade_techs = {
         ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}},
         prerequisites = {"blueprint-shotgun-upgrade-2", "military-science-pack"},
         build_radius = "+1.5 tiles",
-        vacuum_radius = "+1 tile",
+        vacuum_radius = "+1.5 tiles",
     },
     {
         count = 300,
@@ -188,27 +188,27 @@ local upgrade_techs = {
         prerequisites = {"blueprint-shotgun-upgrade-4", "production-science-pack"},
         vacuum_cooldown = true,
         handling = true,
-        vacuum_radius = "+1 tile",
+        vacuum_radius = "+1.5 tiles",
     },
     {
         count = 750,
         ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}},
         prerequisites = {"blueprint-shotgun-upgrade-5", "utility-science-pack"},
-        build_radius = "+0.5 tiles",
+        build_radius = "+1.5 tiles",
     },
     {
         count = 1000,
         ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}},
         prerequisites = {"blueprint-shotgun-upgrade-6", "production-science-pack", "utility-science-pack"},
-        vacuum_radius = "+1 tile",
+        vacuum_radius = "+1.5 tiles",
     },
     {
         count = 1500,
         ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}},
         prerequisites = {"blueprint-shotgun-upgrade-7"},
         handling = true,
-        build_radius = "+0.5 tiles",
-        vacuum_radius = "+1 tile",
+        build_radius = "+1.5 tiles",
+        vacuum_radius = "+1.5 tiles",
     },
 }
 

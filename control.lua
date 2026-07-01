@@ -161,22 +161,22 @@ script.on_event(e.on_script_trigger_effect, function(event)
 
     local build_radius = 3.5
     if technologies["blueprint-shotgun-upgrade-8"].researched then
-        build_radius = 6
+        build_radius = 8
     elseif technologies["blueprint-shotgun-upgrade-6"].researched then
-        build_radius = 5.5
+        build_radius = 6.5
     elseif technologies["blueprint-shotgun-upgrade-3"].researched then
         build_radius = 5
     end
 
     local vacuum_radius = 2
     if technologies["blueprint-shotgun-upgrade-8"].researched then
-        vacuum_radius = 6
+        vacuum_radius = 8
     elseif technologies["blueprint-shotgun-upgrade-7"].researched then
-        vacuum_radius = 5
+        vacuum_radius = 6.5
     elseif technologies["blueprint-shotgun-upgrade-5"].researched then
-        vacuum_radius = 4
+        vacuum_radius = 5
     elseif technologies["blueprint-shotgun-upgrade-3"].researched then
-        vacuum_radius = 3
+        vacuum_radius = 3.5
     end
     if data.mode == "build" and event.tick - data.tick < handling_cooldown then return end
 
