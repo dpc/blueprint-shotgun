@@ -180,7 +180,6 @@ local upgrade_techs = {
         count = 300,
         ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}},
         prerequisites = {"blueprint-shotgun-upgrade-3", "chemical-science-pack"},
-        extra_vacuum_power = true,
     },
     {
         count = 500,
@@ -291,22 +290,6 @@ for i, tech in ipairs(upgrade_techs) do
         table.insert(effects, {
             type = "nothing",
             effect_description = {"blueprint-shotgun.vacuum-radius-upgrade", tech.vacuum_radius},
-            icons = {{
-                icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png"
-            }, {
-                icon = "__core__/graphics/icons/technology/constants/constant-speed.png",
-                icon_size = 128,
-                shift = {11, 9},
-                floating = true,
-            }},
-            use_icon_overlay_constant = false,
-        })
-    end
-
-    if tech.extra_vacuum_power then
-        table.insert(effects, {
-            type = "nothing",
-            effect_description = {"blueprint-shotgun.extra-vacuum-power-upgrade"},
             icons = {{
                 icon = "__blueprint-shotgun-boosted__/graphics/blueprint-shotgun.png"
             }, {

@@ -201,16 +201,13 @@ script.on_event(e.on_script_trigger_effect, function(event)
     end
 
     local bonus = settings.startup["blueprint-shotgun-cheat-bonus"].value
-    local vacuum_bonus = bonus
+    local vacuum_upgrade_count = bonus
     for i = 1, 8 do
         local technology = technologies["blueprint-shotgun-upgrade-" .. i]
         if technology and technology.researched then
             bonus = bonus + 1
-            vacuum_bonus = vacuum_bonus + 1
+            vacuum_upgrade_count = vacuum_upgrade_count + 1
         end
-    end
-    if technologies["blueprint-shotgun-upgrade-4"].researched then
-        vacuum_bonus = vacuum_bonus + 1
     end
 
     local inventory = character.get_main_inventory() --[[@as LuaInventory]]
@@ -231,7 +228,7 @@ script.on_event(e.on_script_trigger_effect, function(event)
         ammo_item = ammo_item,
         ammo_limit = ammo_limit,
         bonus = bonus,
-        mining_speed = (2 + vacuum_bonus) * 5/4,
+        mining_speed = 2.5 + vacuum_upgrade_count * (22.5 / 8),
         source_pos = vec.add(source_pos, vec.rotate({x = 0, y = -1.125}, target_direction * direction_to_angle)),
         target_pos = target_pos,
         radius = build_radius,
